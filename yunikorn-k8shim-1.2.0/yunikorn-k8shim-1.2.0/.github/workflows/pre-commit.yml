@@ -1,0 +1,53 @@
+name: Pre-commit checks
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: .go_version
+      - name: Check license
+        run: make license-check
+      - name: Go lint
+        run: make lint
+      - name: Run Version Check
+        run: make pseudo
+      - name: Run ShellCheck
+        run: make check_scripts
+      - name: Unit tests
+        run: make test
+      - name: Code coverage
+        uses: codecov/codecov-action@v3
+
+  e2e-tests:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        k8s: [v1.26.0, v1.25.3, v1.24.7, v1.23.13, v1.22.15, v1.21.14]
+        plugin: ['', '--plugin']
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version-file: .go_version
+      - run: ./scripts/run-e2e-tests.sh -a "test" -n "yk8s" -v "kindest/node:${KIND_NODE_IMAGE}" --force-kind-install ${KIND_EXTRA_ARGS}
+        env:
+          KIND_NODE_IMAGE: ${{ matrix.k8s }}
+          KIND_EXTRA_ARGS: ${{ matrix.plugin }}

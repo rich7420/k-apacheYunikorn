@@ -1,0 +1,13 @@
+*.tmp
+.DS_Store
+.build
+*.swp
+*.a
+.idea
+*.log
+package-lock.json
+yarn.lock
+_site/
+.docusaurus/
+node_modules/
+build/

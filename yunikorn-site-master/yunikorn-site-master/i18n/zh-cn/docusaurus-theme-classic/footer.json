@@ -1,0 +1,17 @@
+{
+    "link.item.label.Get Involved": {
+        "message": "参与"
+    },
+    "link.title.Code Repositories": {
+        "message": "代码库"
+    },
+    "link.item.label.People": {
+        "message": "人们"
+    },   
+    "link.title.Blog": {
+        "message": "博客"
+    },
+    "link.title.Community": {
+        "message": "社区"
+    }
+}

@@ -1,0 +1,10 @@
+*.tmp
+.DS_Store
+.build
+*.swp
+*.a
+_output
+.idea
+coverage.txt
+yunikorn-state.txt
+shellcheck
